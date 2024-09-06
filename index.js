@@ -1,9 +1,6 @@
 const readlineSync = require('readline-sync');
-
-console.log("----- QUIZ DE FATOS HISTÓRICOS -----\n")
-console.log("Seja Bem-vindo jogador(a)!")
-const name = readlineSync.question("Digite o seu nome: ")
-
+const TRUE = "Resposta correta!";
+const FALSE = "Resposta errada!";
 const questoes = [
     { id: 1, pergunta: 'Quando aconteceu o atentado as Torres Gêmeas?', resposta: '2001' },
     { id: 2, pergunta: 'Em que ano foi detectado o primeiro paciente com coronavírus?', resposta: '2019' },
@@ -35,8 +32,52 @@ const questoes = [
     { id: 28, pergunta: 'Em que ano a Alemanha foi reunificada após a Guerra Fria?', resposta: '1990' },
     { id: 29, pergunta: 'Qual foi o ano do acidente nuclear em Chernobyl?', resposta: '1986' },
     { id: 30, pergunta: 'Em que ano o homem pisou na Lua pela primeira vez?', resposta: '1969' }
-  ];
+];
+let acertos = 0;
   
 function randomQuestion(){
-    // const values = 
+    let questions = [];
+
+    for(let i = 0; i < 10; i++) {
+        const index = Math.floor(Math.random() * 29);
+        const question = questoes[index];
+        questions.push(question);
+    }
+
+    return questions;
 }  
+
+function validateResponse(response, correctAnswer){
+    if (response == correctAnswer){
+        acertos++;
+        console.log(TRUE);
+    } else {
+        console.log(FALSE);
+    }
+}
+
+function getScore(acertos){
+    if (acertos >= 0 && acertos <= 3) {
+        console.log("OH NÃO! Tente mais uma vez.");
+    } else if (acertos >= 4 && acertos <= 6) {
+        console.log("BOM TRABALHO! Pratique um pouco mais.")
+    } else if (acertos >= 7 && acertos <= 9) {
+        console.log("MUITO BOM! Você acertou a maioria.");
+    } else {
+        console.log("EXCELENTE! Você é um verdadeiro expert.")
+    }
+}
+
+console.log("----- QUIZ DE FATOS HISTÓRICOS -----\n")
+console.log("Seja Bem-vindo jogador(a)!")
+const name = readlineSync.question("Digite o seu nome: ")
+console.log("");
+const questions = randomQuestion();
+
+questions.forEach(item => {
+    const response = readlineSync.question(`${item.pergunta} `);
+    validateResponse(response, item.resposta);
+    console.log("");
+})
+getScore(acertos);
+console.log(`Jogador(a): ${name} \nPontuação final: ${acertos} acertos.`)
